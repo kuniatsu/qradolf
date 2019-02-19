@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+    <meta charset="utf-8">
+    <title></title>
+    </head>
+    <link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body{
+            /* background-color: red; */
+            width: 100%;
+            height: 100%;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+        }
+        #QRCode{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        #addlf{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+        }
+        #qr{
+            width:78px;
+            height:78px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+        }
+        .noinput{
+            position: absolute;
+            top: 25%;
+            left: 0;
+            right: 0;
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+        }
+        .title{
+            font-size: 2.5em;
+            margin-left: 25%;
+        } 
+        
+        /* .inputOn{
+            display: none;
+        } */
+
+        /* .inputs{
+            margin-left: 30%;
+            margin-right: 30%;
+        } */
+
+        @media screen and (max-width: 999px) { 
+            /*SP*/
+            .inputs{
+                height: 100%;
+                margin-left: 0%;
+                margin-right: 0%;
+            } 
+        }
+        @media screen and (min-width:1000px) {
+            .inputs{
+                margin-left: 30%;
+                margin-right: 30%;
+            } 
+        }
+    </style>
+    
+<body style="background-color: bisque">
+    <div id="QRCode">
+        <div class="noinput">
+            <!-- <p class="title">QRコードメーカー　メールアドルフ！</p> -->
+            <hr>
+            <div class="inputs input-group">
+                <input id="text" type="text" class="form-control  input-lg" placeholder="abc123">
+                <span id="bt1" class="input-group-addon" id="basic-addon2">@example.com</span>
+            </div>
+        </div>
+        <div class="inputOn">
+            <!-- <img id="addlf" src="addlf.png"> -->
+            <img id="qr" class="alignnone" src="" />
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+    <div id="testBlock">
+        <canvas id="c1"></canvas>
+        <button id="draw" >draw()</button>
+        <button id="" ></button>
+        <button id="" ></button>
+
+    </div>
+    <script src="./index.js"></script>    
+    <script language="JavaScript">
+        // (()=>{
+        //     bt1.addEventListener('click',()=>{
+        //         if(text.value != ""){
+                    let canvas = document.getElementById('canvas');
+                    let qrImage = document.getElementById('qr');
+                    draw(canvas,qrImage);
+                    qrImage.src='qr.png';
+                    // qrImage.src='https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=' + text.value;
+        //         }
+        //     });
+        // })();
+
+        function draw(canvas,image){
+            // const image = new Image();
+            image.addEventListener("load",function (){
+                console.dir("loadEvent");
+                canvas.width = image.naturalWidth;
+                canvas.height = image.naturalHeight;
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0);
+
+                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                console.dir(imageData);
+
+                for(let i = 0; i < (imageData.width*imageData.height); i++) {            
+                    if((imageData.data[i*4] == 255) && 
+                    (imageData.data[i*4+1] == 255) &&
+                    (imageData.data[i*4+2] == 255)) {
+                        imageData.data[i*4+3] = 0;
+                    }
+                    ctx.putImageData(imageData, 0, 0); 
+                }
+            });
+            // image.src = imagePath;
+        }
+    </script>
+    <script src="./test.js"></script>    
+</body>
+</html>

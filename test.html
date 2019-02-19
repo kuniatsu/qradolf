@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+    <meta charset="utf-8">
+    <title></title>
+    </head>
+<body style="background-color:blanchedalmond">
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+ const canvas = document.getElementById("canvas"); 
+ let imagePath = "qr.png";
+ draw(canvas,imagePath);
+ 
+
+ function draw(canvas,imagePath){
+    const image = new Image();
+    image.addEventListener("load",function (){
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        let ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+
+        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        console.dir(imageData);
+
+        for(let i = 0; i < (imageData.width*imageData.height); i++) {            
+            if((imageData.data[i*4] == 255) && 
+            (imageData.data[i*4+1] == 255) &&
+            (imageData.data[i*4+2] == 255)) {
+                imageData.data[i*4+3] = 0;
+            }
+            ctx.putImageData(imageData, 0, 0); 
+        }
+    });
+    image.src = imagePath;
+ }
+ </script>
+</html>
